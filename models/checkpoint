@@ -1,0 +1,2 @@
+model_checkpoint_path: "/tensorflow_dev/tensorflow-sudoku/models/catch_ball.ckpt"
+all_model_checkpoint_paths: "/tensorflow_dev/tensorflow-sudoku/models/catch_ball.ckpt"
