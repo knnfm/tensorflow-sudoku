@@ -27,17 +27,19 @@ class SudokuGenerater:
             if self.base_result[y][x] != 0:
                 self.base_result[y][x] = 0
                 count += 1
-        self.logger()
+        self.logger(self.base_result)
         return self.base_result
 
-    def logger(self):
+    def logger(self, question):
+        return
+
         log = []
         for x in range(9):
             for y in range(9):
-                if self.base_result[y][x] == 0:
+                if question[y][x] == 0:
                     log.append("△")
                 else:
-                    log.append(str(self.base_result[y][x]))
+                    log.append(str(question[y][x]))
                 log.append("\t")
             log.append("\n")
         print "".join(log)

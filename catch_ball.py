@@ -34,7 +34,7 @@ class CatchBall:
 
         if is_end == True:
             self.terminal = True
-            self.logger()
+            self.sudoku_generater.logger(self.sudoku)
             if self.is_success() == True:
                 self.reward = 1
 
@@ -67,21 +67,9 @@ class CatchBall:
 
     # 新規問題生成
     def set_question(self):
-        a = SudokuGenerater()
-        self.sudoku = a.generate(1)
+        self.sudoku_generater = SudokuGenerater()
+        self.sudoku = self.sudoku_generater.generate(1)
 
     def reset(self):
         self.reward = 0
         self.terminal = False
-
-    def logger(self):
-        log = []
-        for x in range(9):
-            for y in range(9):
-                if self.sudoku[y][x] == 0:
-                    log.append("△")
-                else:
-                    log.append(str(self.sudoku[y][x]))
-                log.append("\t")
-            log.append("\n")
-        print "".join(log)

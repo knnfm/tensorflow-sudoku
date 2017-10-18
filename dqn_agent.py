@@ -20,7 +20,6 @@ class DQNAgent:
         self.replay_memory_size = 1000
         self.learning_rate = 0.001
         self.discount_factor = 0.9
-
         self.exploration = 0.1
         self.model_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models")
         self.model_name = "{}.ckpt".format(self.environment_name)
@@ -71,12 +70,10 @@ class DQNAgent:
         return self.sess.run(self.y, feed_dict={self.x: [state]})[0]
 
     def select_action(self, state, epsilon):
-#        if np.random.rand() <= epsilon:
-            # random
+       if np.random.rand() <= epsilon:
             return np.random.choice(self.enable_actions)
-#        else:
-            # max_action Q(state, action)
-            # return self.enable_actions[np.argmax(self.Q_values(state))]
+       else:
+            return self.enable_actions[np.argmax(self.Q_values(state))]
 
     def store_experience(self, state, action, reward, state_1, terminal):
         self.D.append((state, action, reward, state_1, terminal))
