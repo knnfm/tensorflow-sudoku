@@ -7,7 +7,7 @@ from dqn_agent import DQNAgent
 
 
 if __name__ == "__main__":
-    n_epochs = 100
+    n_epochs = 1000
     env = CatchBall()
     agent = DQNAgent(env.enable_actions, env.name)
     win = 0
@@ -29,7 +29,7 @@ if __name__ == "__main__":
             state_t_1, reward_t, terminal = env.observe()
 
             agent.store_experience(state_t, action_t, reward_t, state_t_1, terminal)
-            agent.experience_replay()
+            agent.experience_replay(e)
 
             # for log
             frame += 1

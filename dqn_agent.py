@@ -23,15 +23,10 @@ class DQNAgent:
         self.exploration = 0.1
         self.model_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models")
         self.model_name = "{}.ckpt".format(self.environment_name)
-
-        # replay memory
         self.D = deque(maxlen=self.replay_memory_size)
-
-        # model
+        self.current_loss = 0
+        self.current_loss_t = tf.placeholder(tf.float32)
         self.init_model()
-
-        # variables
-        self.current_loss = 0.0
 
     def init_model(self):
         log_dir = './logs'
@@ -70,7 +65,7 @@ class DQNAgent:
         self.sess = tf.Session()
 
         # TensorBoard
-        tf.summary.scalar("loss", 1.0)
+        tf.summary.scalar("current_loss", self.current_loss_t)
         self.summary_merged = tf.summary.merge_all()
         self.summary_writer = tf.summary.FileWriter(log_dir , self.sess.graph)
 
@@ -89,7 +84,7 @@ class DQNAgent:
     def store_experience(self, state, action, reward, state_1, terminal):
         self.D.append((state, action, reward, state_1, terminal))
 
-    def experience_replay(self):
+    def experience_replay(self, count):
         state_minibatch = []
         y_minibatch = []
 
@@ -117,14 +112,9 @@ class DQNAgent:
         # for log
         self.current_loss = self.sess.run(self.loss, feed_dict={self.x: state_minibatch, self.y_: y_minibatch})
 
-        # print type(self.summary_merged)
-        self.a = tf.placeholder(tf.float32, [1])
-        summary = self.sess.run(self.summary_merged, feed_dict={self.a: self.feed_dict(False)})
-        self.summary_writer.add_summary(summary, self.current_loss)
+        summary = self.sess.run(self.summary_merged, feed_dict={self.current_loss_t: self.current_loss})
+        self.summary_writer.add_summary(summary, count)
         self.summary_writer.flush()
-
-    def feed_dict(self, train):
-      return [1.0]
 
     def load_model(self, model_path=None):
         if model_path:
