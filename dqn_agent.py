@@ -57,7 +57,7 @@ class DQNAgent:
         self.loss = tf.reduce_mean(tf.square(self.y_ - self.y))
 
         # train operation
-        optimizer = tf.train.RMSPropOptimizer(self.learning_rate)
+        optimizer = tf.train.AdamOptimizer(self.learning_rate)
         self.training = optimizer.minimize(self.loss)
 
         # saver
