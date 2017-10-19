@@ -100,9 +100,12 @@ class DQNAgent:
             state_j, action_j, reward_j, state_j_1, terminal = self.D[j]
             action_j_index = self.enable_actions.index(action_j)
 
+            # print state_j
+            # print state_j_1
             y_j = self.Q_values(state_j)
 
             if terminal:
+                # print state_j
                 y_j[action_j_index] = reward_j
             else:
                 y_j[action_j_index] = reward_j + self.discount_factor * np.max(self.Q_values(state_j_1))  # NOQA
@@ -111,9 +114,10 @@ class DQNAgent:
             y_minibatch.append(y_j)
 
         self.sess.run(self.training, feed_dict={self.x: state_minibatch, self.y_: y_minibatch})
-        print "\n"
-        for loop in range(len(state_minibatch)):
-            print state_minibatch[loop]
+        # if terminal:
+            # print state_minibatch[len(state_minibatch)-1]
+            # print y_minibatch[len(y_minibatch)-1]
+            # print "-----------------------------"
 
         self.current_loss = self.sess.run(self.loss, feed_dict={self.x: state_minibatch, self.y_: y_minibatch})
 

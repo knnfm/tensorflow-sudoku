@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import copy
 import numpy as np
 
 from catch_ball import CatchBall
@@ -7,10 +8,9 @@ from dqn_agent import DQNAgent
 
 
 if __name__ == "__main__":
-    n_epochs = 1000
+    n_epochs = 10000
     env = CatchBall()
     agent = DQNAgent(env.enable_actions, env.name)
-    # win = 0
 
     for e in range(n_epochs):
         frame = 0
@@ -22,11 +22,18 @@ if __name__ == "__main__":
 
         # 全部数字が埋まるまでループ
         while not terminal:
-            state_t = state_t_1
+
+            state_t = copy.deepcopy(state_t_1)
+            # print state_t
+            # print state_t_1
             action_t = agent.select_action(state_t, agent.exploration)
             env.execute_action(action_t)
+            # print "↓"
 
             state_t_1, reward_t, terminal = env.observe()
+            # print state_t
+            # print state_t_1
+
 
             agent.store_experience(state_t, action_t, reward_t, state_t_1, terminal)
             agent.experience_replay(e)
