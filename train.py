@@ -10,7 +10,7 @@ if __name__ == "__main__":
     n_epochs = 1000
     env = CatchBall()
     agent = DQNAgent(env.enable_actions, env.name)
-    win = 0
+    # win = 0
 
     for e in range(n_epochs):
         frame = 0
@@ -36,11 +36,11 @@ if __name__ == "__main__":
             loss += agent.current_loss
             Q_max += np.max(agent.Q_values(state_t))
             if reward_t == 1:
-                win += 1
+                agent.win += 1
 
 
         # print("EPOCH: {:03d}/{:03d} | WIN: {:03d} | LOSS: {:.4f} | Q_MAX: {:.4f}".format(e, n_epochs - 1, win, loss / frame, Q_max / frame))
-        print("{:03d}\t{:.4f}\t{:.4f}\t{:.4f}".format(e, float(win)/(e+1), loss / frame, Q_max / frame))
+        print("{:03d}\t{:.4f}\t{:.4f}\t{:.4f}".format(e, float(agent.win)/(e+1), loss / frame, Q_max / frame))
 
     # save model
     agent.save_model()

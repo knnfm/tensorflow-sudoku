@@ -24,6 +24,8 @@ class DQNAgent:
         self.model_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models")
         self.model_name = "{}.ckpt".format(self.environment_name)
         self.D = deque(maxlen=self.replay_memory_size)
+        self.win = 0
+        self.win_t = tf.placeholder(tf.float32)
         self.current_loss = 0
         self.current_loss_t = tf.placeholder(tf.float32)
         self.init_model()
@@ -65,7 +67,8 @@ class DQNAgent:
         self.sess = tf.Session()
 
         # TensorBoard
-        tf.summary.scalar("current_loss", self.current_loss_t)
+        tf.summary.scalar("win", self.win_t)
+        tf.summary.scalar("loss", self.current_loss_t)
         self.summary_merged = tf.summary.merge_all()
         self.summary_writer = tf.summary.FileWriter(log_dir , self.sess.graph)
 
@@ -112,7 +115,7 @@ class DQNAgent:
         # for log
         self.current_loss = self.sess.run(self.loss, feed_dict={self.x: state_minibatch, self.y_: y_minibatch})
 
-        summary = self.sess.run(self.summary_merged, feed_dict={self.current_loss_t: self.current_loss})
+        summary = self.sess.run(self.summary_merged, feed_dict={self.current_loss_t: self.current_loss, self.win_t: self.win})
         self.summary_writer.add_summary(summary, count)
         self.summary_writer.flush()
 
