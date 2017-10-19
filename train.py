@@ -7,7 +7,7 @@ from dqn_agent import DQNAgent
 
 
 if __name__ == "__main__":
-    n_epochs = 1000
+    n_epochs = 100
     env = CatchBall()
     agent = DQNAgent(env.enable_actions, env.name)
     win = 0
@@ -40,7 +40,6 @@ if __name__ == "__main__":
 
 
         # print("EPOCH: {:03d}/{:03d} | WIN: {:03d} | LOSS: {:.4f} | Q_MAX: {:.4f}".format(e, n_epochs - 1, win, loss / frame, Q_max / frame))
-
         print("{:03d}\t{:.4f}\t{:.4f}\t{:.4f}".format(e, float(win)/(e+1), loss / frame, Q_max / frame))
 
     # save model

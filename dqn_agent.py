@@ -34,6 +34,11 @@ class DQNAgent:
         self.current_loss = 0.0
 
     def init_model(self):
+        log_dir = './logs'
+        if tf.gfile.Exists(log_dir):
+            tf.gfile.DeleteRecursively(log_dir)
+        tf.gfile.MakeDirs(log_dir)
+
         # input layer (9 x 9)
         self.x = tf.placeholder(tf.float32, [None, 9, 9])
 
@@ -63,6 +68,12 @@ class DQNAgent:
 
         # session
         self.sess = tf.Session()
+
+        # TensorBoard
+        tf.summary.scalar("loss", 1.0)
+        self.summary_merged = tf.summary.merge_all()
+        self.summary_writer = tf.summary.FileWriter(log_dir , self.sess.graph)
+
         self.sess.run(tf.global_variables_initializer())
 
     def Q_values(self, state):
@@ -105,6 +116,15 @@ class DQNAgent:
 
         # for log
         self.current_loss = self.sess.run(self.loss, feed_dict={self.x: state_minibatch, self.y_: y_minibatch})
+
+        # print type(self.summary_merged)
+        self.a = tf.placeholder(tf.float32, [1])
+        summary = self.sess.run(self.summary_merged, feed_dict={self.a: self.feed_dict(False)})
+        self.summary_writer.add_summary(summary, self.current_loss)
+        self.summary_writer.flush()
+
+    def feed_dict(self, train):
+      return [1.0]
 
     def load_model(self, model_path=None):
         if model_path:
