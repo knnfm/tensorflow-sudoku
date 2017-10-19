@@ -20,10 +20,14 @@ class CatchBall:
         self.reward = 0
         self.terminal = False
 
+
+        print "------------"
+        self.sudoku_generater.logger(self.sudoku)
         for x in range(9):
             for y in range(9):
                 if (int(self.sudoku[y][x]) == 0):
                     self.sudoku[y][x] = action
+        self.sudoku_generater.logger(self.sudoku)
 
         is_end = True
         for x in range(9):
@@ -34,9 +38,12 @@ class CatchBall:
 
         if is_end == True:
             self.terminal = True
-            self.sudoku_generater.logger(self.sudoku)
             if self.is_success() == True:
+                print "Reward 1"
                 self.reward = 1
+            else:
+                print "Reward -1"
+                self.reward = -1
 
     # 数独が正解か
     def is_success(self):

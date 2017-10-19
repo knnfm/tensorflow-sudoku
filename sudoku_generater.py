@@ -119,12 +119,12 @@ class SudokuGenerater:
             if self.base_result[z][y][x] != 0:
                 self.base_result[z][y][x] = 0
                 count += 1
-        self.logger(self.base_result[z])
+        # self.logger(self.base_result[z])
         return self.base_result[z]
 
     def logger(self, question):
-        return
-    
+        # return
+
         log = []
         for y in range(9):
             for x in range(9):

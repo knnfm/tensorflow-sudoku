@@ -57,6 +57,7 @@ class DQNAgent:
         self.loss = tf.reduce_mean(tf.square(self.y_ - self.y))
 
         # train operation
+        # optimizer = tf.train.RMSPropOptimizer(self.learning_rate)
         optimizer = tf.train.AdamOptimizer(self.learning_rate)
         self.training = optimizer.minimize(self.loss)
 
@@ -109,12 +110,14 @@ class DQNAgent:
             state_minibatch.append(state_j)
             y_minibatch.append(y_j)
 
-        # training
         self.sess.run(self.training, feed_dict={self.x: state_minibatch, self.y_: y_minibatch})
+        print "\n"
+        for loop in range(len(state_minibatch)):
+            print state_minibatch[loop]
 
-        # for log
         self.current_loss = self.sess.run(self.loss, feed_dict={self.x: state_minibatch, self.y_: y_minibatch})
 
+        # TensorBoard
         summary = self.sess.run(self.summary_merged, feed_dict={self.current_loss_t: self.current_loss, self.win_t: self.win})
         self.summary_writer.add_summary(summary, count)
         self.summary_writer.flush()
