@@ -8,7 +8,7 @@ from dqn_agent import DQNAgent
 
 
 if __name__ == "__main__":
-    n_epochs = 10000
+    n_epochs = 100000
     env = CatchBall()
     agent = DQNAgent(env.enable_actions, env.name)
 

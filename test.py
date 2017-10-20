@@ -30,22 +30,17 @@ def print_result(env, ai_hand, challenger_hand, reward):
 
 
 if __name__ == "__main__":
-        # args
     parser = argparse.ArgumentParser()
     parser.add_argument("-m", "--model_path")
-    parser.add_argument("-a", "--action")
     args = parser.parse_args()
 
-    # environmet, agent
     env = CatchBall()
     agent = DQNAgent(env.enable_actions, env.name)
     agent.load_model(args.model_path)
-    env.set_card(args.action)
-    state_t, reward_t = env.observe()
 
-    # variables
-    action_t = agent.select_action(state_t, 0.0)
-    env.execute_action(action_t)
-    state_t, reward_t = env.observe()
-
-    print_result(env, int(action_t), env.get_hand_number(state_t), reward_t)
+    env.reset()
+    env.set_question()
+    state_t_1, reward_t, terminal = env.observe()
+    action_t = agent.select_action(state_t_1, 0.0)
+    print state_t_1
+    print action_t
